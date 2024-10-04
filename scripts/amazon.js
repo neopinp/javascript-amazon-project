@@ -1,7 +1,7 @@
 // takes each product from products.js and creates an HTML element
-let productsHTML = '';
+let productsHTML = "";
 products.forEach((product) => {
-  productsHTML +=  `        
+  productsHTML += `        
         <div class="product-container">
           <div class="product-image-container">
             <img class="product-image"
@@ -46,9 +46,51 @@ products.forEach((product) => {
             Added
           </div>
 
-          <button class="add-to-cart-button button-primary">
+          <button class="add-to-cart-button button-primary js-add-to-cart"
+          data-product-name="${product.name}"> 
             Add to Cart
           </button>
-        </div>`;
+        </div>`; // use data- attribute to store product name of associated button press
 });
-document.querySelector('.js-products-grid').innerHTML = productsHTML;
+document.querySelector(".js-products-grid").innerHTML = productsHTML;
+
+document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+  button.addEventListener("click", () => {
+    const productName = button.dataset.productName;
+
+    cart.forEach((item) => {
+      if (productName === item.productName) {
+        item.quantity++;
+      } else {
+        cart.push({
+          productName: productName,
+          quantity: 1,
+        });
+      }
+    });
+    console.log(cart);
+  });
+});
+
+document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+  button.addEventListener("click", () => {
+    const productName = button.dataset.productName;
+
+    let matchingItem;
+
+    cart.forEach((item) => {
+      if (productName === item.productName) {
+        matchingItem = item;
+      }
+    });
+
+    if (matchingItem) {
+      matchingItem.quantity += 1;
+    } else {
+      cart.push({
+        productName: productName,
+        quantity: 1,
+      });
+    }
+  });
+});
